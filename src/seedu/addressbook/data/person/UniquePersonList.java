@@ -10,7 +10,7 @@ import java.util.List;
 import seedu.addressbook.common.Utils;
 import seedu.addressbook.data.exception.DuplicateDataException;
 
-
+import java.util.Comparator;
 
 /**
  * A list of persons. Does not allow null elements or duplicates.
@@ -140,4 +140,26 @@ public class UniquePersonList implements Iterable<Person> {
                 || (other instanceof UniquePersonList // instanceof handles nulls
                         && this.internalList.equals(((UniquePersonList) other).internalList));
     }
+    
+    public UniquePersonList sortListAlphabetically() {
+        try {
+            UniquePersonList newList = new UniquePersonList(this.internalList);
+            newList.internalList.sort(personNameComparator);
+            return newList;
+        } catch (DuplicatePersonException dpe) {
+            //catch statement is left blank intentionally since there wont be a duplicate from copying
+        }
+        //return no names if cannot sort 
+        return new UniquePersonList();
+    }
+    
+    public static Comparator<Person> personNameComparator = new Comparator<Person>() {
+       
+        @Override
+        public int compare (Person p1, Person p2) {
+            String personName1 = p1.getName().toString();
+            String personName2 = p2.getName().toString();
+            return personName1.compareTo(personName2);
+        }
+    };
 }
